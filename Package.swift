@@ -25,10 +25,22 @@ let package = Package(
         .target(name: "SwiftSileroVAD",
                 dependencies: [
                     .product(name: "onnxruntime", package: "onnxruntime-swift-package-manager"),
-                ]),
+                ],
+                resources: [.process("Resources")]),
         .testTarget(
             name: "SwiftSileroVADTests",
             dependencies: ["SwiftSileroVAD"]
         ),
     ]
 )
+
+let swiftSettings: [SwiftSetting] = [
+    .enableExperimentalFeature("StrictConcurrency"),
+//    .enableExperimentalFeature("IsolatedAny"), // enable in Swift 6
+]
+
+for target in package.targets {
+    var settings = target.swiftSettings ?? []
+    settings.append(contentsOf: swiftSettings)
+    target.swiftSettings = settings
+}
