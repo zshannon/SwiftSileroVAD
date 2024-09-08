@@ -1,11 +1,11 @@
 import OnnxRuntimeBindings
 
-struct SileroVAD {
+public struct SileroVAD {
     private let session: ORTSession
     private var context = [Float](repeating: 0.0, count: 0)
     private var lastSampleRate: Int = 0
 
-    init() throws {
+    public init() throws {
         let modelPath = Bundle.module.url(forResource: "silero_vad", withExtension: "onnx")!.path
         let env = try ORTEnv(loggingLevel: .error)
         let options = try ORTSessionOptions()
@@ -17,12 +17,12 @@ struct SileroVAD {
         session = try ORTSession(env: env, modelPath: modelPath, sessionOptions: options)
     }
 
-    mutating func resetStates() {
+    public mutating func resetStates() {
         context = []
         lastSampleRate = 0
     }
 
-    mutating func run(bytes: [Float], sampleRate: Int = 16000) throws -> Float {
+    public mutating func run(bytes: [Float], sampleRate: Int = 16000) throws -> Float {
         enum Error: Swift.Error, Codable, Sendable { case invalidSampleRate }
         guard sampleRate == 16000 || sampleRate == 8000 else {
             throw Error.invalidSampleRate

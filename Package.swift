@@ -5,15 +5,18 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftSileroVAD",
-    platforms: [.iOS(.v12), .macOS(.v11)],
+    platforms: [.iOS(.v12), .macOS(.v12)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "SwiftSileroVAD",
             targets: ["SwiftSileroVAD"]
         ),
+        .executable(name: "SwiftSileroVADExample", targets: ["SwiftSileroVADExample"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/AudioKit/AudioKit", .upToNextMajor(from: "5.6.2")),
+        .package(url: "https://github.com/AudioKit/AudioKitEX", .upToNextMajor(from: "5.4.0")),
         .package(
             url: "https://github.com/microsoft/onnxruntime-swift-package-manager",
             branch: "main"
@@ -32,6 +35,13 @@ let package = Package(
             dependencies: ["SwiftSileroVAD"],
             resources: [.process("Resources")]
         ),
+        .executableTarget(name: "SwiftSileroVADExample",
+                          dependencies: ["AudioKit", "AudioKitEX", "SwiftSileroVAD"],
+                          path: "SwiftSileroVADExample/SwiftSileroVADExample",
+                          linkerSettings: [.unsafeFlags(["-sectcreate",
+                                                         "__TEXT",
+                                                         "__info_plist",
+                                                         "SwiftSileroVADExample/SwiftSileroVADExample/Info.plist"])]),
     ]
 )
 
