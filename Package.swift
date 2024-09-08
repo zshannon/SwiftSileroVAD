@@ -29,7 +29,8 @@ let package = Package(
                 resources: [.process("Resources")]),
         .testTarget(
             name: "SwiftSileroVADTests",
-            dependencies: ["SwiftSileroVAD"]
+            dependencies: ["SwiftSileroVAD"],
+            resources: [.process("Resources")]
         ),
     ]
 )
