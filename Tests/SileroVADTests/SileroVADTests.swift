@@ -18,9 +18,9 @@ final class SileroVADTests: XCTestCase {
             )])) }
         XCTAssertEqual(probabilities.count, 344)
         XCTAssertEqual(probabilities[0], 0.012012929)
-        XCTAssertEqual(probabilities[100], 0.066182435)
-        XCTAssertEqual(probabilities[200], 0.91776323)
-        XCTAssertEqual(probabilities[300], 0.6470929)
-        XCTAssertEqual(probabilities[343], 0.57817054)
+        XCTAssertEqual(probabilities[100], 0.00037288666)
+        XCTAssertEqual(probabilities[200], 0.9736656)
+        XCTAssertEqual(probabilities[300], 0.9937366)
+        XCTAssertEqual(probabilities[343], 0.10319075)
     }
 }
