@@ -3,6 +3,7 @@ import OnnxRuntimeBindings
 public struct SileroVAD {
     private let session: ORTSession
     private var context = [Float](repeating: 0.0, count: 0)
+    private var state: [Float] = .init(repeating: 0.0, count: 0)
     private var lastSampleRate: Int = 0
 
     public init() throws {
@@ -17,8 +18,9 @@ public struct SileroVAD {
         session = try ORTSession(env: env, modelPath: modelPath, sessionOptions: options)
     }
 
-    public mutating func resetStates() {
+    public mutating func resetStates(sampleRate: Int = 16000) {
         context = []
+        state = .init(repeating: 0.0, count: 2 * (sampleRate == 16000 ? 128 : 64))
         lastSampleRate = 0
     }
 
@@ -30,7 +32,7 @@ public struct SileroVAD {
 
         let contextSize = sampleRate == 16000 ? 64 : 32
         if lastSampleRate != sampleRate {
-            resetStates()
+            resetStates(sampleRate: sampleRate)
         }
 
         if context.isEmpty {
@@ -44,8 +46,6 @@ public struct SileroVAD {
             shape: [1, NSNumber(value: input.count)]
         )
 
-        // NB: no idea what `state` is supposed to be but everything i've tried leaves it all 0s after every run so not bothering with it anymore
-        let state = [Float](repeating: 0.0, count: 2 * 128)
         let stateTensorData = NSMutableData(data: Data(bytes: state, count: state.count * MemoryLayout<Float>.stride))
         let stateTensor = try ORTValue(
             tensorData: stateTensorData,
@@ -65,7 +65,11 @@ public struct SileroVAD {
             "sr": srTensor,
         ]
 
-        let outputs: [String: ORTValue] = try session.run(withInputs: inputs, outputNames: ["output"], runOptions: nil)
+        let outputs: [String: ORTValue] = try session.run(
+            withInputs: inputs,
+            outputNames: ["output", "stateN"],
+            runOptions: nil
+        )
 
         context = Array(input.suffix(contextSize))
         lastSampleRate = sampleRate
@@ -77,6 +81,14 @@ public struct SileroVAD {
                 start: $0.baseAddress!.assumingMemoryBound(to: Float.self),
                 count: outputData.count / MemoryLayout<Float>.stride
             ))
+        }
+        if let stateNTensor = outputs["stateN"], let stateNData = try? stateNTensor.tensorData() as Data {
+            state = stateNData.withUnsafeBytes {
+                Array(UnsafeBufferPointer<Float>(
+                    start: $0.baseAddress!.assumingMemoryBound(to: Float.self),
+                    count: stateNData.count / MemoryLayout<Float>.stride
+                ))
+            }
         }
         return output.first ?? 0
     }

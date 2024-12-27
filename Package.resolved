@@ -1,5 +1,5 @@
 {
-  "originHash" : "97225d157332e0c227abc7ed8f969b02ec77d7951ef0f1c96277b6816b2ecb71",
+  "originHash" : "f10c648103461fa4f99bbf2aff21f1098640bc0f373f14805062d7699b12f54e",
   "pins" : [
     {
       "identity" : "audiokit",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/microsoft/onnxruntime-swift-package-manager",
       "state" : {
-        "branch" : "main",
-        "revision" : "6493bb55b6e0408e0a312a9b995bbc474785d1b9"
+        "revision" : "12ce7374c86944e1f68f3a866d10105d8357f074",
+        "version" : "1.20.0"
       }
     }
   ],

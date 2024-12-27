@@ -10,7 +10,7 @@ import AudioKitEX
 import AVFAudio
 import Combine
 import Foundation
-import SwiftSileroVAD
+import SileroVAD
 
 actor ViewModel {
     private var vad: SileroVAD

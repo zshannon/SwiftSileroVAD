@@ -1,12 +1,12 @@
 //
 //  ContentView.swift
-//  SwiftSileroVADExample
+//  SileroVADExample
 //
 //  Created by Zane Shannon on 9/7/24.
 //
 
 import Charts
-import SwiftSileroVAD
+import SileroVAD
 import SwiftUI
 
 struct ContentView: View {

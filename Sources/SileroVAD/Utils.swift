@@ -1,6 +1,6 @@
 //
 //  Utils.swift
-//  SwiftSileroVAD
+//  SileroVAD
 //
 //  Created by Zane Shannon on 12/22/24.
 //

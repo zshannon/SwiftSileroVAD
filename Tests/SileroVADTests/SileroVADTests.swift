@@ -1,7 +1,7 @@
-@testable import SwiftSileroVAD
+@testable import SileroVAD
 import XCTest
 
-final class SwiftSileroVADTests: XCTestCase {
+final class SileroVADTests: XCTestCase {
     func testInit() throws {
         XCTAssertNoThrow(try SileroVAD())
     }
